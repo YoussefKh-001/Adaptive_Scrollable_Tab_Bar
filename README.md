@@ -3,6 +3,13 @@
 Adaptive Scrollable Tab Bar is an upgraded version of Bottom Navigation Bar
 It supports scrolling between tabs and animation on transition between tabs also the bottom navigation bar will adapt with the device so if it's android it will bring the android style and if it is an IOS device it will automatically change the style to cupertino style
 
+
+## Preview
+
+![Preview](https://user-images.githubusercontent.com/71779742/114459242-8ddd4400-9be0-11eb-81f8-2c52f3c6a252.gif)
+
+
+
 ## How to use
 
 After installing the package and including it to your project you will now need a `MaterialApp` Widget to put this widget on it
@@ -18,8 +25,7 @@ They Are `List<BottomNavigationBarItem>`
 
 Items are the bottom buttons that will refer to the tabs
 
-![items](Images/Items.png "Items Example")
-
+[![items](Items.png)](https://drive.google.com/file/d/1slE4nvbO5b29stBQDl4m28VuQo2dtlMX/view?usp=sharing)
 #### `Pages`
 They Are `List<Widget>`
 
