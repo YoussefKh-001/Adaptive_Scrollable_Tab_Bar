@@ -10,20 +10,6 @@ After installing the package and including it to your project you will now need 
 the main widget in the widget tree is a `Scaffold` widget so you can add your `appBar` inside this widget and don't add the `appBar` outside
 (`appBar` is not necessary)
 
-The `AdaptiveScrollableTabsView` Has **2 required arguments**  
-    **-Items**
-    # AdaptiveScrollableTabsView
-
-Adaptive Scrollable Tab Bar is an upgraded version of Bottom Navigation Bar
-It supports scrolling between tabs and animation on transition between tabs also the bottom navigation bar will adapt with the device so if it's android it will bring the android style and if it is an IOS device it will automatically change the style to cupertino style
-
-## How to use
-
-After installing the package and including it to your project you will now need a `MaterialApp` Widget to put this widget on it
-
-the main widget in the widget tree is a `Scaffold` widget so you can add your `appBar` inside this widget and don't add the `appBar` outside
-(`appBar` is not necessary)
-
 ### Required Arguments
 The `AdaptiveScrollableTabsView` Has **2 required arguments:**
 
