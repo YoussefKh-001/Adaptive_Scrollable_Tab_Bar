@@ -1,4 +1,4 @@
-# Adaptive Scrollable TabsView
+# Adaptive Scrollable TabsView For Flutter
 
 Adaptive Scrollable Tab Bar is an upgraded version of Bottom Navigation Bar
 It supports scrolling between tabs and animation on transition between tabs also the bottom navigation bar will adapt with the device so if it's android it will bring the android style and if it is an IOS device it will automatically change the style to cupertino style
