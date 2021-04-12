@@ -25,7 +25,8 @@ They Are `List<BottomNavigationBarItem>`
 
 Items are the bottom buttons that will refer to the tabs
 
-[![items](Items.png)](https://drive.google.com/file/d/1slE4nvbO5b29stBQDl4m28VuQo2dtlMX/view?usp=sharing)
+![Items](https://user-images.githubusercontent.com/71779742/114459574-00e6ba80-9be1-11eb-9899-0f6a7d903b5c.png)
+
 #### `Pages`
 They Are `List<Widget>`
 
