@@ -6,7 +6,9 @@ It supports scrolling between tabs and animation on transition between tabs also
 
 ## Preview
 
-![Preview](https://user-images.githubusercontent.com/71779742/114459242-8ddd4400-9be0-11eb-81f8-2c52f3c6a252.gif)
+
+![package](https://user-images.githubusercontent.com/71779742/115730775-e05bf480-a386-11eb-967e-e927058af5ea.gif)
+
 
 
 
@@ -77,11 +79,6 @@ Objective : refers to the curve of transition animation
 Type : `Duration`
 
 Objective : refers to animation transition duration when user tabs on item of the bottom tab bar
-
-#### `animationDurationForScroll`
-Type : `Duration`
-
-Objective : refers to animation transition duration when user scroll between pages
 
 #### `elevation`
 Type : `double`
