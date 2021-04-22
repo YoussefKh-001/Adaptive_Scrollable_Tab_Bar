@@ -29,9 +29,6 @@ class AdaptiveScrollableTabsView extends StatefulWidget {
   /// Navigating through tabs using tab bar duration
   final Duration animationDurationForTab;
 
-  /// Navigating through tabs by scrolling duration
-  final Duration animationDurationForScroll;
-
   /// Navigating through tabs animation curve
   final Curve animationCurve;
 
@@ -62,11 +59,14 @@ class AdaptiveScrollableTabsView extends StatefulWidget {
   /// Enable or Disable Tabs Scrolling
   final bool allowScroll;
 
+  /// Drawer
+  final Widget drawer;
+
   /// The current tab
   int currentPage;
 
   /// This will pass the selected page index to you
-  Function onTap;
+  ValueChanged<int> onTap;
 
   AdaptiveScrollableTabsView({
     @required this.pages,
@@ -78,8 +78,7 @@ class AdaptiveScrollableTabsView extends StatefulWidget {
     this.unselectedColor = Colors.grey,
     this.backgroundColor = Colors.white,
     this.animationCurve = Curves.fastOutSlowIn,
-    this.animationDurationForTab = const Duration(milliseconds: 100),
-    this.animationDurationForScroll = const Duration(milliseconds: 100),
+    this.animationDurationForTab = const Duration(milliseconds: 500),
     this.elevation,
     this.iconSize = 24,
     this.selectedFontSize = 14,
@@ -89,6 +88,7 @@ class AdaptiveScrollableTabsView extends StatefulWidget {
     this.showSelectedLabels = true,
     this.showUnselectedLabels = true,
     this.allowScroll = true,
+    this.drawer,
     this.onTap,
   }) {
     //currentPage = startTab;
@@ -101,103 +101,69 @@ class AdaptiveScrollableTabsView extends StatefulWidget {
 
 class _AdaptiveScrollableTabsViewState
     extends State<AdaptiveScrollableTabsView> {
-  ScrollController _scrollController = new ScrollController();
+  PageController _pageController;
 
-  bool selectPageByIndex(int index, Size mediaQuery) {
-    Future.delayed(Duration.zero, () {
-      _scrollController.animateTo(mediaQuery.width * index,
-          duration: widget.animationDurationForTab,
-          curve: widget.animationCurve);
-    });
-    widget.currentPage = index;
-    return true;
+  int currentPage = 0;
+  @override
+  void initState() {
+    super.initState();
+    _pageController = new PageController(initialPage: widget.startTab);
+    widget.currentPage = widget.startTab;
+    currentPage = widget.startTab;
   }
 
-  bool selectPageByScroll(double position, double width) {
-    double ratio = position / width;
-    int index = position ~/ width;
-    int currentPage = this.widget.currentPage;
-
-    if (currentPage == index) {
-      if (ratio - index > 0.3) {
-        currentPage = index + 1;
-      } else if (ratio - index <= 0.3) {
-        currentPage = index;
-      }
-    } else {
-      if (index > currentPage)
-        currentPage = index;
-      else {
-        if (ratio - index <= 0.7 && ratio >= index) {
-          if (currentPage > 0) currentPage -= currentPage - index;
-        }
-      }
-    }
+  void selectPage(int index) {
     setState(() {
-      this.widget.currentPage = currentPage;
+      widget.currentPage = index;
+      currentPage = index;
     });
+    widget.onTap(index);
+  }
 
-    Future.delayed(Duration.zero, () {
-      _scrollController.animateTo(width * currentPage,
-          duration: widget.animationDurationForScroll,
-          curve: widget.animationCurve);
-      if (widget.onTap != null) widget.onTap(currentPage);
-    });
-    return true;
+  selectPageByIndex(int index) {
+    _pageController.animateToPage(
+      index,
+      duration: widget.animationDurationForTab,
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context).size;
-    selectPageByIndex(widget.currentPage, mediaQuery);
     return Scaffold(
+      drawer: widget.drawer,
       appBar: widget.appBar,
-      body: NotificationListener<ScrollEndNotification>(
-        onNotification: (n) {
-          return selectPageByScroll(
-              _scrollController.position.pixels, mediaQuery.width);
-        },
-        child: ListView(
-          physics: widget.allowScroll
-              ? ClampingScrollPhysics()
-              : NeverScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          controller: _scrollController,
-          children: widget.pages.map((page) {
-            return Container(
-              width: mediaQuery.width,
-              height: mediaQuery.height,
-              child: page,
-            );
-          }).toList(),
-        ),
+      body: PageView(
+        children: widget.pages,
+        controller: _pageController,
+        onPageChanged: (i) => selectPage(i),
       ),
       bottomNavigationBar: !Platform.isIOS
           ? BottomNavigationBar(
-        onTap: (index) => selectPageByIndex(index, mediaQuery),
-        currentIndex: widget.currentPage,
-        selectedItemColor: widget.selectedColor,
-        unselectedItemColor: widget.unselectedColor,
-        backgroundColor: widget.backgroundColor,
-        items: widget.items,
-        elevation: widget.elevation,
-        iconSize: widget.iconSize,
-        selectedFontSize: widget.selectedFontSize,
-        unselectedFontSize: widget.unselectedFontSize,
-        selectedLabelStyle: widget.selectedLabelStyle,
-        unselectedLabelStyle: widget.unselectedLabelStyle,
-        showSelectedLabels: widget.showSelectedLabels,
-        showUnselectedLabels: widget.showUnselectedLabels,
-      )
+              onTap: (index) => selectPageByIndex(index),
+              currentIndex: currentPage,
+              selectedItemColor: widget.selectedColor,
+              unselectedItemColor: widget.unselectedColor,
+              backgroundColor: widget.backgroundColor,
+              items: widget.items,
+              elevation: widget.elevation,
+              iconSize: widget.iconSize,
+              selectedFontSize: widget.selectedFontSize,
+              unselectedFontSize: widget.unselectedFontSize,
+              selectedLabelStyle: widget.selectedLabelStyle,
+              unselectedLabelStyle: widget.unselectedLabelStyle,
+              showSelectedLabels: widget.showSelectedLabels,
+              showUnselectedLabels: widget.showUnselectedLabels,
+            )
           : CupertinoTabBar(
-        onTap: (index) => selectPageByIndex(index, mediaQuery),
-        items: widget.items,
-        activeColor: widget.selectedColor,
-        inactiveColor: widget.unselectedColor,
-        backgroundColor: widget.backgroundColor,
-        iconSize: widget.iconSize,
-        currentIndex: widget.currentPage,
-      ),
+              onTap: (index) => selectPage(index),
+              items: widget.items,
+              activeColor: widget.selectedColor,
+              inactiveColor: widget.unselectedColor,
+              backgroundColor: widget.backgroundColor,
+              iconSize: widget.iconSize,
+              currentIndex: widget.currentPage,
+            ),
     );
   }
 }
